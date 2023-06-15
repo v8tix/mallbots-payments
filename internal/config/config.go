@@ -25,18 +25,18 @@ type (
 		LogLevel        string        `json:"log_level,omitempty"`
 		PG              PGConfig      `json:"db_cfg,omitempty"`
 		Nats            NatsConfig    `json:"nats_cfg,omitempty"`
-		Rpc             RpcConfig     `json:"rpc_cfg,omitempty"`
+		RPC             RPCConfig     `json:"rpc_cfg,omitempty"`
 		Web             WebConfig     `json:"web_cfg,omitempty"`
 		ShutdownTimeout time.Duration `json:"shutdown_timeout,omitempty"`
 	}
 )
 
-type RpcConfig struct {
+type RPCConfig struct {
 	Host string `json:"host,omitempty"`
 	Port string `json:"port,omitempty"`
 }
 
-func (c RpcConfig) Address() string {
+func (c RPCConfig) Address() string {
 	return fmt.Sprintf("%s:%s", c.Host, c.Port)
 }
 
