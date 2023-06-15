@@ -19,7 +19,7 @@ import (
 	"github.com/v8tix/eda/waiter"
 	"github.com/v8tix/eda/web"
 	"github.com/v8tix/mallbots-payments/internal/config"
-	"github.com/v8tix/mallbots-payments/internal/monolith"
+	"github.com/v8tix/mallbots-payments/internal/ms"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 	var cfgFileFlag string
 	var cfg config.AppConfig
 
-	flag.StringVar(&cfgDirFlag, "d", "/home/v8tix/Public/projects/v8tix/microservices/environments/cloud/mallbots/payments", "The configuration directory")
+	flag.StringVar(&cfgDirFlag, "d", "/home/v8tix/Public/projects/v8tix/microservices/environments/cloud/mallbots/payments/dev", "The configuration directory")
 	flag.StringVar(&cfgFileFlag, "f", "config", "The configuration file")
 	flag.Parse()
 
@@ -73,12 +73,12 @@ func run(configFile string, cfg *config.AppConfig) (err error) {
 		return err
 	}
 	m.logger = initLogger(cfg)
-	m.rpc = initRpc(cfg.Rpc)
+	m.rpc = initRPC(cfg.RPC)
 	m.mux = initMux(cfg.Web)
 	m.waiter = waiter.New(waiter.CatchSignals())
 
 	// init modules
-	m.modules = []monolith.Module{
+	m.modules = []ms.Module{
 		&payments.Module{},
 	}
 
@@ -117,7 +117,7 @@ func initLogger(cfg *config.AppConfig) zerolog.Logger {
 	})
 }
 
-func initRpc(_ config.RpcConfig) *grpc.Server {
+func initRPC(_ config.RPCConfig) *grpc.Server {
 	server := grpc.NewServer()
 	reflection.Register(server)
 
